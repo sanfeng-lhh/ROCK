@@ -151,7 +151,12 @@ class JobConfig(BaseModel):
         default=None,
         description="Job name, auto-generated if not set",
     )
-    jobs_dir: Path = Path(USER_DEFINED_LOGS) / "jobs"
+    base_out_dir: Path = Path(USER_DEFINED_LOGS)
+    jobs_dir: Path | None = Field(
+        default=None,
+        description="Output directory for job artifacts. "
+        "When base_out_dir is set and jobs_dir is not specified, use base_out_dir / 'jobs' as the default.",
+    )
     n_attempts: int = 1
     timeout_multiplier: float = 1.0
     agent_timeout_multiplier: float | None = None
