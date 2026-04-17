@@ -25,6 +25,7 @@ if TYPE_CHECKING:
     from rock.sdk.job.trial.abstract import AbstractTrial
 
 logger = init_logger(__name__)
+trial_out_logger = init_logger(f"{__name__}.trial_output")
 
 
 @dataclass
@@ -139,7 +140,7 @@ class JobExecutor:
         )
         exit_code = obs.exit_code if obs.exit_code is not None else 1
         if obs.output:
-            logger.info(f"Trial output (job={config.job_name}):\n{obs.output}")
+            trial_out_logger.info(f"Trial output (job={config.job_name}):\n{obs.output}")
         result = await client.trial.collect(client.sandbox, obs.output or "", exit_code)
         # G5: populate raw_output / exit_code on every TrialResult so they surface in JobResult
         iter_results = result if isinstance(result, list) else [result]
